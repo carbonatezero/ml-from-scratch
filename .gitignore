@@ -1,0 +1,19 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# Data (datasets should not be committed)
+data/
+
+# Environment
+.env
+venv/
+.env/

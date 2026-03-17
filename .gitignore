@@ -17,3 +17,6 @@ data/
 .env
 venv/
 .env/
+
+artifacts/
+*demos/*_temp.ipynb

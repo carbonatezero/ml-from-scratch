@@ -2,8 +2,12 @@
 
 ## 01_knn_demo
 - k-Nearest Neighbor classifier
-- distance metrics, cross-validation
+- distance metrics, vectorization, cross-validation
 
 ## 02_softmax_demo
 - Softmax linear classifier
-- loss, gradient, training loop
+- loss, gradient, training loop, regularization
+
+## 03_two_layer_net_demo
+- Two-layer neural network (affine → ReLU → affine)
+- forward pass, backpropagation, parameter tuning

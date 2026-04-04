@@ -11,3 +11,7 @@
 ## 03_two_layer_net_demo
 - Two-layer neural network (affine → ReLU → affine)
 - forward pass, backpropagation, parameter tuning
+
+## 04_features_demo
+- hand-crafted image features for CIFAR-10
+- HOG + HSV histograms, softmax, and a two-layer net on extracted features

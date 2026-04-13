@@ -125,14 +125,14 @@ class LinearClassifier(object):
 
     def save(self, fname):
       """Save model parameters."""
-      fpath = os.path.join(os.path.dirname(__file__), "../saved/", fname)
+      fpath = os.path.join(os.path.dirname(__file__), "../../artifacts/", fname)
       params = {"W": self.W}
       np.save(fpath, params)
       print(fname, "saved.")
     
     def load(self, fname):
       """Load model parameters."""
-      fpath = os.path.join(os.path.dirname(__file__), "../saved/", fname)
+      fpath = os.path.join(os.path.dirname(__file__), "../../artifacts/", fname)
       if not os.path.exists(fpath):
         print(fname, "not available.")
         return False

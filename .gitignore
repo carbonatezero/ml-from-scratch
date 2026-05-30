@@ -17,6 +17,10 @@ data/
 .env
 venv/
 .env/
+.venv/
 
 artifacts/
 *demos/*_temp.ipynb
+
+# Generated demo release artifacts
+demos/demos_code_bundle.zip

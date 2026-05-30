@@ -1,0 +1,9 @@
+numpy
+scipy
+matplotlib
+imageio
+future
+six
+jupyter
+pytest
+PyPDF2

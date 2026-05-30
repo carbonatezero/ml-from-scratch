@@ -12,15 +12,20 @@ __pycache__/
 
 # Data (datasets should not be committed)
 data/
+assignment*/data/*
+!assignment*/data/.gitkeep
 
 # Environment
 .env
 venv/
 .env/
 .venv/
+assignment*/.venv/
 
 artifacts/
+assignment*/artifacts/
 *demos/*_temp.ipynb
+assignment*/demos/*_temp.ipynb
 
 # Generated demo release artifacts
-demos/demos_code_bundle.zip
+assignment*/demos/demos_code_bundle.zip

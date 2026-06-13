@@ -5,8 +5,9 @@ standalone local projects with readable notebook/PDF snapshots.
 
 ## Structure
 
+- `assignment0/` - tiny plain-Python fully connected neural network toy example
 - `assignment1/` - kNN, softmax classifiers, two-layer nets, fully connected nets, hand-crafted features
-- `assignment2/` - planned work for normalization, dropout, convolutional nets, PyTorch, and RNN captioning
+- `assignment2/` - normalization, dropout, convolutional nets, PyTorch, and RNN captioning
 
 Each assignment keeps the Python source close to the original CS231n assignment
 layout. Changes should stay limited to local path/package adaptation, repository
@@ -28,10 +29,11 @@ The demo notebooks and GitHub-readable PDF snapshots live in
 
 ## Assignment 2
 
-Assignment 2 is intentionally empty for now. Build it from the original CS231n
-assignment files using the same pattern as Assignment 1: preserve source
-structure, adapt local paths/imports only where needed, and add demo snapshots
-after the notebooks are complete.
+Assignment 2 currently includes the locally adapted Q1 batch normalization
+notebook. Continue building it from the original CS231n assignment files using
+the same pattern as Assignment 1: preserve source structure, adapt local
+paths/imports only where needed, and add demo snapshots after the notebooks are
+complete.
 
 ## Attribution
 

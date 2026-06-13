@@ -14,6 +14,8 @@ __pycache__/
 data/
 assignment*/data/*
 !assignment*/data/.gitkeep
+assignment*/src/datasets/*
+!assignment*/src/datasets/*.sh
 
 # Environment
 .env

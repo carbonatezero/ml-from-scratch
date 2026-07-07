@@ -31,3 +31,7 @@ assignment*/demos/*_temp.ipynb
 
 # Generated demo release artifacts
 assignment*/demos/demos_code_bundle.zip
+
+# Local reference materials
+_resources/
+assignment*/_resources/

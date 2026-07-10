@@ -22,6 +22,7 @@ assignment*/src/datasets/*
 venv/
 .env/
 .venv/
+.venv-*/
 assignment*/.venv/
 assignment*/.venv-*/
 

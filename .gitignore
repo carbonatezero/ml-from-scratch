@@ -23,6 +23,7 @@ venv/
 .env/
 .venv/
 assignment*/.venv/
+assignment*/.venv-*/
 
 # Generated native extension build outputs
 assignment*/src/build/

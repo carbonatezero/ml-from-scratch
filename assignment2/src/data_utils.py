@@ -14,11 +14,14 @@ def load_pickle(f):
     if version[0] == "2":
         return pickle.load(f)
     elif version[0] == "3":
+        visible_deprecation_warning = getattr(
+            getattr(np, "exceptions", np), "VisibleDeprecationWarning", Warning
+        )
         with warnings.catch_warnings():
             warnings.filterwarnings(
                 "ignore",
                 message="dtype\(\): align should be passed as Python or NumPy boolean",
-                category=np.exceptions.VisibleDeprecationWarning,
+                category=visible_deprecation_warning,
             )
             return pickle.load(f, encoding="latin1")
     raise ValueError("invalid python version: {}".format(version))

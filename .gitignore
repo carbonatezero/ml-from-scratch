@@ -36,6 +36,9 @@ assignment*/artifacts/
 *demos/*_temp.ipynb
 assignment*/demos/*_temp.ipynb
 
+# Local model checkpoints
+assignment*/part5_best_model.pt
+
 # Generated demo release artifacts
 assignment*/demos/demos_code_bundle.zip
 

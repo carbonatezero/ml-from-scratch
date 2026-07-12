@@ -48,9 +48,19 @@ is structurally the longest notebook in this demo set.
 - Word embeddings
 - Temporal affine and softmax layers
 - RNN image captioning model
+- Small-data overfit check
+- Test-time caption sampling
 
 This notebook is a separate sequence-modeling track and depends on the RNN and
-COCO helper source files being present in `../src/`.
+COCO helper source files being present in `../src/`. It is scoped to vanilla
+RNN captioning; copied LSTM helpers in the upstream support files are not part
+of this demo path.
+
+The notebook has been locally adapted to run from `assignment2/` or
+`assignment2/demos/`, uses the local `src` package, and expects the compact
+CS231n COCO captioning data under `../src/datasets/coco_captioning`. Image URLs
+from the original metadata may be stale; URL display errors are harmless because
+training and sampling use the precomputed features on disk.
 
 ## Suggested Workflow
 

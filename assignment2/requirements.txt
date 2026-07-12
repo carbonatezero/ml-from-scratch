@@ -1,6 +1,7 @@
 numpy<2
 scipy
 matplotlib
+h5py
 imageio
 future
 six

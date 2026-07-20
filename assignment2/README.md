@@ -18,18 +18,39 @@ source refactors.
 
 ## Setup
 
-Run commands from this directory unless noted otherwise.
+Use the project-level virtual environment at the repository root so kernels and
+dependencies stay consistent across assignments.
+
+From the repository root:
 
 ```bash
-cd assignment2
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r assignment2/requirements.txt
 ```
 
 The notebooks add the assignment root to `sys.path`, then import reusable code
 from `src/`. CIFAR-10 data is expected under `src/datasets/`; the PyTorch
 notebook can download CIFAR-10 there if needed.
+
+## Run Checks
+
+Run the lightweight local test suite:
+
+```bash
+python -m pytest
+```
+
+For a quick syntax-only check:
+
+```bash
+PYTHONPYCACHEPREFIX=/tmp/mlfs_a2_pycache python -m compileall -q src tests
+```
+
+The tests are intentionally small and dataset-free. They cover the core layer
+contracts, normalization/dropout behavior, the fully connected net API, PyTorch
+RNN helpers, and notebook JSON/code-cell parseability. They do not replace the
+exercise-specific notebook checks or full notebook reruns.
 
 ## Notebook Status
 
@@ -51,6 +72,26 @@ The current readiness check for notebooks 01-04 is:
 
 Notebook 05 is the next unfinished track. It has unexecuted code cells and an
 empty trailing code cell.
+
+## Demos
+
+The notebooks in `demos/` mirror the original Assignment 2 progression:
+
+1. Batch normalization and layer normalization
+2. Dropout
+3. Convolutional neural networks
+4. PyTorch on CIFAR-10
+5. Vanilla RNN image captioning
+
+To package the adapted notebooks and source into a zip and combined PDF, run:
+
+```bash
+cd demos
+bash collect_demos.sh
+```
+
+The PDF step requires a working local Jupyter/PDF toolchain. The generated code
+bundle zip is ignored because it is a packaging artifact.
 
 ## Rerun Commands
 

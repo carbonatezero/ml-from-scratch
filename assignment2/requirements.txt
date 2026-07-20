@@ -9,3 +9,5 @@ jupyter
 Cython
 torch
 torchvision
+pytest
+PyPDF2

@@ -42,12 +42,15 @@ organization unless a small fix is needed for local use.
 
 ## Setup
 
-Create an environment and install the dependencies:
+Use the project-level virtual environment at the repository root so kernels and
+dependencies stay consistent across assignments.
+
+From the repository root:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r assignment1/requirements.txt
 ```
 
 The demos expect CIFAR-10-style data under a local data directory. Dataset files

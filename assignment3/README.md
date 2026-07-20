@@ -18,14 +18,20 @@ source refactors.
 
 ## Setup
 
-Run commands from this directory unless noted otherwise.
+Use the project-level virtual environment at the repository root so kernels and
+dependencies stay consistent across assignments.
+
+From the repository root:
 
 ```bash
-cd assignment3
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r assignment3/requirements.txt
 ```
+
+If you use the Apple Silicon/MPS environment, keep it beside `.venv` as
+`.venv-arm` at the same project root and register the notebook kernel from that
+interpreter.
 
 The notebooks add the assignment root to `sys.path`, then import reusable code
 from `src/`. Dataset scripts from the original assignment live under

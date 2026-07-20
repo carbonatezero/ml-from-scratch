@@ -104,3 +104,27 @@ ThreeLayerConvNet
 spatial_batchnorm_forward / spatial_batchnorm_backward
 spatial_groupnorm_forward / spatial_groupnorm_backward
 ```
+
+## Local Checks
+
+From `assignment2/`, run:
+
+```bash
+python -m pytest
+```
+
+These tests provide the same kind of lightweight local guardrail used in
+Assignment 1. They check small deterministic layer/model contracts and notebook
+parseability without downloading datasets or executing full notebooks.
+
+## Packaging
+
+To package the adapted notebooks and source into a zip and combined PDF:
+
+```bash
+bash collect_demos.sh
+```
+
+The PDF step depends on a local Jupyter/PDF toolchain. If that toolchain is not
+installed, use the notebooks directly and rerun individual notebook cells
+instead.

@@ -27,8 +27,9 @@ def train(model, data_loader, train_optimizer, epoch, epochs, batch_size=32, tem
     for data_pair in train_bar:
         x_i, x_j, target = data_pair
         x_i, x_j = x_i.to(device), x_j.to(device)
-        
-        out_left, out_right, loss = None, None, None
+        _, out_left = model(x_i)
+        _, out_right = model(x_j)
+        loss = simclr_loss_vectorized(out_left, out_right, temperature, device=device)
         ##############################################################################
         # TODO: Start of your code.                                                  #
         #                                                                            #
@@ -46,8 +47,8 @@ def train(model, data_loader, train_optimizer, epoch, epochs, batch_size=32, tem
         loss.backward()
         train_optimizer.step()
 
-        total_num += batch_size
-        total_loss += loss.item() * batch_size
+        total_num += x_i.size(0)
+        total_loss += loss.item() * x_i.size(0)
         train_bar.set_description('Train Epoch: [{}/{}] Loss: {:.4f}'.format(epoch, epochs, total_loss / total_num))
 
     return total_loss / total_num

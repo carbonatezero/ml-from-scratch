@@ -22,7 +22,9 @@ def get_similarity_no_loop(text_features, image_features):
         torch.Tensor: A similarity matrix of shape (N, M), where each entry (i, j)
         is the cosine similarity between text_features[i] and image_features[j].
     """
-    similarity = None
+    text_features = text_features / text_features.norm(dim=1, keepdim=True)
+    image_features = image_features / image_features.norm(dim=1, keepdim=True)
+    similarity = text_features @ image_features.T
     ############################################################################
     # TODO: Compute the cosine similarity. Do NOT use for loops.               #
     ############################################################################
@@ -57,7 +59,15 @@ def clip_zero_shot_classifier(clip_model, clip_preprocess, images,
             given class_texts.
     """
     
-    pred_classes = []
+    text_tokens = clip.tokenize(class_texts).to(device)
+    text_features = clip_model.encode_text(text_tokens)
+    image_tensor = torch.stack(
+        [clip_preprocess(Image.fromarray(image)) for image in images]
+    ).to(device)
+    image_features = clip_model.encode_image(image_tensor)
+    similarities = get_similarity_no_loop(text_features, image_features)
+    pred_indices = similarities.argmax(dim=0).tolist()
+    pred_classes = [class_texts[index] for index in pred_indices]
 
     ############################################################################
     # TODO: Find the class labels for images.                                  #
@@ -91,10 +101,19 @@ class CLIPImageRetriever:
         # similarity function for most compute-optimal implementation.#
         ############################################################################
 
+        self.clip_model = clip_model
+        self.device = device
+        image_tensor = torch.stack(
+            [clip_preprocess(Image.fromarray(image)) for image in images]
+        ).to(device)
+        self.image_features = clip_model.encode_image(image_tensor)
+        self.image_features = self.image_features / self.image_features.norm(
+            dim=1, keepdim=True
+        )
+
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
-        pass
     
     @torch.no_grad()
     def retrieve(self, query: str, k: int = 2):
@@ -109,7 +128,11 @@ class CLIPImageRetriever:
         Returns:
             List[int]: Indices of the top-k most similar images.
         """
-        top_indices = []
+        text_tokens = clip.tokenize([query]).to(self.device)
+        text_features = self.clip_model.encode_text(text_tokens)
+        text_features = text_features / text_features.norm(dim=1, keepdim=True)
+        scores = text_features @ self.image_features.T
+        top_indices = scores.squeeze(0).topk(k).indices.tolist()
         ############################################################################
         # TODO: Retrieve the indices of top-k images.                              #
         ############################################################################
@@ -234,7 +257,11 @@ class DINOSegmentation:
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
-        pass
+        self.model = nn.Linear(inp_dim, num_classes).to(device)
+        self.optimizer = torch.optim.Adam(
+            self.model.parameters(), lr=1e-2, weight_decay=1e-4
+        )
+        self.loss_fn = nn.CrossEntropyLoss()
 
     def train(self, X_train, Y_train, num_iters=500):
         """Train the segmentation model using the provided training data.
@@ -251,7 +278,13 @@ class DINOSegmentation:
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
-        pass
+        self.model.train()
+        for _ in range(num_iters):
+            logits = self.model(X_train)
+            loss = self.loss_fn(logits, Y_train)
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()
     
     @torch.no_grad()
     def inference(self, X_test):
@@ -263,7 +296,8 @@ class DINOSegmentation:
         Returns:
             torch.Tensor of shape (N,): Predicted class indices.
         """
-        pred_classes = None
+        self.model.eval()
+        pred_classes = self.model(X_test).argmax(dim=1)
         ############################################################################
         # TODO: Train your model for `num_iters` steps.                            #
         ############################################################################

@@ -1,12 +1,10 @@
 import copy
 from einops import rearrange
 from torch import einsum
-
 from torch import nn
 import torch
 import torch.nn.functional as F
 import math
-
 
 def exists(x):
     return x is not None
@@ -180,6 +178,13 @@ class Unet(nn.Module):
             # Make sure to exactly follow this structure of ModuleList in order to
             # load a pretrained checkpoint.
             ##################################################################
+            down_block = nn.ModuleList(
+                [
+                    ResnetBlock(dim_in, dim_in, context_dim=context_dim),
+                    ResnetBlock(dim_in, dim_in, context_dim=context_dim),
+                    Downsample(dim_in, dim_out),
+                ]
+            )
 
             ##################################################################
             self.downs.append(down_block)
@@ -204,6 +209,13 @@ class Unet(nn.Module):
             # Don't forget to account for the skip connections by having 2 x dim_out
             # channels at the input of both ResnetBlocks.
             ##################################################################
+            up_block = nn.ModuleList(
+                [
+                    Upsample(dim_in, dim_out),
+                    ResnetBlock(dim_out * 2, dim_out, context_dim=context_dim),
+                    ResnetBlock(dim_out * 2, dim_out, context_dim=context_dim),
+                ]
+            )
 
             self.ups.append(up_block)
             ##################################################################
@@ -214,10 +226,13 @@ class Unet(nn.Module):
     def cfg_forward(self, x, time, model_kwargs={}):
         """Classifier-free guidance forward pass. model_kwargs should contain `cfg_scale`."""
 
-        cfg_scale = model_kwargs.pop("cfg_scale")
-        print("Classifier-free guidance scale:", cfg_scale)
         model_kwargs = copy.deepcopy(model_kwargs)
-
+        cfg_scale = model_kwargs.pop("cfg_scale")
+        conditioned = self.forward(x, time, model_kwargs=model_kwargs)
+        unconditional_kwargs = copy.deepcopy(model_kwargs)
+        unconditional_kwargs["text_emb"] = None
+        unconditioned = self.forward(x, time, model_kwargs=unconditional_kwargs)
+        x = (cfg_scale + 1) * conditioned - cfg_scale * unconditioned
         ##################################################################
         # TODO: Apply classifier-free guidance using Eq. (6) from
         # https://arxiv.org/pdf/2207.12598 i.e.
@@ -226,7 +241,6 @@ class Unet(nn.Module):
         # You will have to call self.forward two times.
         # For unconditional sampling, pass None in`text_emb`.
         ##################################################################
-
         ##################################################################
 
         return x
@@ -281,6 +295,23 @@ class Unet(nn.Module):
         #      skip connection from the downsampling path.
         #    - Make sure to pass the context to each ResNet block.
         ##################################################################
+        skip_connections = []
+        for block1, block2, downsample in self.downs:
+            x = block1(x, context)
+            skip_connections.append(x)
+            x = block2(x, context)
+            skip_connections.append(x)
+            x = downsample(x)
+
+        x = self.mid_block1(x, context)
+        x = self.mid_block2(x, context)
+
+        for upsample, block1, block2 in self.ups:
+            x = upsample(x)
+            x = torch.cat((x, skip_connections.pop()), dim=1)
+            x = block1(x, context)
+            x = torch.cat((x, skip_connections.pop()), dim=1)
+            x = block2(x, context)
 
         ##################################################################
 

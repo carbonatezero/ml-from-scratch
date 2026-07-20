@@ -3,7 +3,11 @@ import numpy as np
 import h5py
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-BASE_DIR = os.path.join(dir_path, "datasets/coco_captioning")
+LOCAL_BASE_DIR = os.path.join(dir_path, "datasets/coco_captioning")
+SHARED_BASE_DIR = os.path.abspath(
+    os.path.join(dir_path, "..", "..", "assignment2", "src", "datasets", "coco_captioning")
+)
+BASE_DIR = LOCAL_BASE_DIR if os.path.isdir(LOCAL_BASE_DIR) else SHARED_BASE_DIR
 
 def load_coco_data(base_dir=BASE_DIR, max_train=None, pca_features=True):
     print('base dir ', base_dir)

@@ -1,5 +1,9 @@
 import torch
-from tqdm.auto import tqdm
+try:
+    from tqdm.auto import tqdm
+except ImportError:
+    def tqdm(iterable):
+        return iterable
 
 
 def train_val(model, data_loader, train_optimizer, epoch, epochs, device='cpu'):
